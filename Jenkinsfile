@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     def timestamp = new Date().format("yyyy-MM-dd_HH.mm.ss")
-                    env.REPORT_NAME = "htmlextra-report-${timestamp}.html"
+                    env.REPORT_NAME = "jenkins-newman-test-report-${timestamp}.html"
                 }
                 bat """
                 if not exist "Test Results\\newman" mkdir "Test Results\\newman"
@@ -42,9 +42,12 @@ pipeline {
     post {
         always {
             publishHTML (target: [
-                reportDir: 'Test Results/newman',
+                reportDir: 'Test Results\\newman',
                 reportFiles: '*.html',
-                reportName: 'Newman Test Reports'
+                reportName: 'Newman Test Reports',
+                keepAll: true,
+                allowMissing: false,
+                alwaysLinkToLastBuild: true
             ])
         }
     }
