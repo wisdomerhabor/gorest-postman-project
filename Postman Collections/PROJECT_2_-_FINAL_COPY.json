@@ -1,0 +1,1618 @@
+{
+	"info": {
+		"_postman_id": "842e076c-c816-4aeb-9700-b3d7bfae0f28",
+		"name": "PROJECT 2 - FINAL COPY",
+		"schema": "https://schema.postman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "E2E API AUTOMATION",
+			"item": [
+				{
+					"name": "CREATE A USER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "84f071b7-d696-4426-9695-61ad1aa481f1",
+								"exec": [
+									"pm.test(\"Create User - Verify response code is 201 Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.status(\"Created\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 5 seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body is received from server\", function () {\r",
+									"    pm.response.to.have.body();\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response header Content-Type=application/json\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\",\"application/json; charset=utf-8\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body contains fields such as id, name, email, gender, status\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"gender\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request => Verify if gender is [male or female]\", function () {\r",
+									"    pm.expect(pm.response.json().gender).to.be.oneOf([\"male\", \"female\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request => Verify if status is [active, or inactive]\", function () {\r",
+									"    pm.expect(pm.response.json().status).to.be.oneOf([\"active\", \"inactive\"]);\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"//\r",
+									"\r",
+									"// API CHAINING CODE //\r",
+									"\r",
+									"// 1. Extract the response of the API and store it in a local variable\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"// 2. Extract the required field(s) and store it in a local variable\r",
+									"\r",
+									"var extractedID = jsonData.id;\r",
+									"var extractedName = jsonData.name;\r",
+									"var extractedEmail = jsonData.email;\r",
+									"var extractedStatus = jsonData.status;\r",
+									"\r",
+									"//3. Convert local variable to global variables using the snippets\r",
+									"\r",
+									"pm.globals.set(\"globalID\", extractedID);\r",
+									"pm.globals.set(\"globalName\", extractedName);\r",
+									"pm.globals.set(\"globalEmail\", extractedEmail);\r",
+									"pm.globals.set(\"globalStatus\", extractedStatus);\r",
+									"\r",
+									"\r",
+									"\r",
+									"// CONDICTIONAL STATEMENTS / POSTMAN WORKFLOWS\r",
+									"\r",
+									"if (pm.response.code == 201) {\r",
+									"    console.log(\"The '\"+pm.info.requestName+\"' API has passed\");\r",
+									"    pm.execution.setNextRequest(\"VALIDATE IF USER IS CREATED\");\r",
+									"    // Execute the API with the specified name\r",
+									"} else {\r",
+									"    console.log(\"The '\"+pm.info.requestName+\"' API has failed\");\r",
+									"    pm.execution.setNextRequest(\"\"); // Stop test execution\r",
+									"}\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e99a6b6c-e578-4158-8d08-7af2501a7a01",
+								"exec": [
+									"//1.\r",
+									"// Dynamically create arrays\r",
+									"let statusArrayOptions = [\"Active\", \"Inactive\"]; // Example values\r",
+									"let genderArrayOptions = [\"Male\", \"Female\"];\r",
+									"\r",
+									"// Set the created array as collection variable string\r",
+									"pm.collectionVariables.set(\"statusOptions\", JSON.stringify(statusArrayOptions));\r",
+									"pm.collectionVariables.set(\"gender\", JSON.stringify(genderArrayOptions)); // JSON string = \"**\"\r",
+									"\r",
+									"//2.\r",
+									"// Retrieve the collection variable by parsing the array string as JSON array objects\r",
+									"let statusArray = JSON.parse(pm.collectionVariables.get(\"statusOptions\"));\r",
+									"var genderArray = JSON.parse(pm.collectionVariables.get(\"gender\"));\r",
+									"\r",
+									"// Select a random array object\r",
+									"let randomStatus = statusArray[Math.floor(Math.random() * statusArray.length)];\r",
+									"var randomGender = genderArray[Math.floor(Math.random() * genderArray.length)]\r",
+									"\r",
+									"// Set the selected andom array object as a new collection variable\r",
+									"pm.collectionVariables.set(\"selectedStatus\", randomStatus);\r",
+									"pm.collectionVariables.set(\"gender\", randomGender);\r",
+									"\r",
+									"\r",
+									"//Log the selected status to the console.\r",
+									"console.log(\"Selected Status: \", randomStatus);\r",
+									"console.log(\"Selected Gender: \", randomGender);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "fd1cf7b3-4fc6-4df3-85a3-94160b5a7afc",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"user-agent": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+							},
+							{
+								"key": "User-Agent",
+								"value": "{{$randomUserAgent}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"gender\": \"{{gender}}\", \r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"{{selectedStatus}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://gorest.co.in/public/v2/users",
+						"description": "### Add New User\n\nThis endpoint allows you to add a new user to the system.\n\n#### Request Body\n\n- `name` (string, required): The name of the user.\n    \n- `gender` (string, required): The gender of the user.\n    \n- `email` (string, required): The email address of the user.\n    \n- `status` (string, required): The status of the user.\n    \n\n#### Response\n\nUpon successful creation, the endpoint returns the details of the newly created user including:\n\n- `id` (integer): The unique identifier of the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample Response:\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"\",\n    \"email\": \"\",\n    \"gender\": \"\",\n    \"status\": \"\"\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "VALIDATE IF USER IS CREATED",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0b4030b8-cae0-4a91-9754-7e36b4258b1f",
+								"exec": [
+									"pm.test(\"List Users - Verify response code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 5 seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+									"});\r",
+									"\r",
+									"pm.test.skip(\"Verify the response body string received from server\", function () {\r",
+									"    pm.response.to.have.body(\"response_body_string\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body is received from server\", function () {\r",
+									"    pm.response.to.have.body();\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response header Content-Type=application/json\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\",\"application/json; charset=utf-8\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body contains fields such as id, name, email, gender, status\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"gender\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"pm.test(\"Response body has valid Content-Type header\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"// VERIFY IF SPECIFIC USER IS CREATED using JSON Value\r",
+									"\r",
+									"//The new id is present at index zero\r",
+									"\r",
+									"/*\r",
+									"pm.test(\"Your test name\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.value).to.eql(100);\r",
+									"});\r",
+									"\r",
+									"pm.globals.get(\"variable_key\");\r",
+									"*/\r",
+									"\r",
+									"pm.test(\"Verify if user is created successfully with id = \" +pm.globals.get(\"globalID\"), function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0].id).to.eql(pm.globals.get(\"globalID\"));\r",
+									"}); // when array [] index is 0 value is \"globalID\"\r",
+									"\r",
+									"\r",
+									"\r",
+									"// CONDICTIONAL STATEMENTS / POSTMAN WORKFLOWS\r",
+									"\r",
+									"if (pm.response.code == 200) {\r",
+									"    console.log(\"The '\"+pm.info.requestName+\"' API has passed\");\r",
+									"    pm.execution.setNextRequest(\"UPDATE THIS CREATED USER\");\r",
+									"    // Execute the API with the specified name\r",
+									"} else {\r",
+									"    console.log(\"The '\"+pm.info.requestName+\"' API has failed\");\r",
+									"    pm.execution.setNextRequest(\"\"); // Stop test execution\r",
+									"}\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "d9558c82-3a7f-4f09-85ee-8e7d5ba55e3b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"user-agent": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer ACCESS-TOKEN"
+							},
+							{
+								"key": "User-Agent",
+								"value": "{{$randomUserAgent}}",
+								"type": "text"
+							}
+						],
+						"url": "https://gorest.co.in/public/v2/users",
+						"description": "### Get Users\n\nThis endpoint sends an HTTP GET request to retrieve a list of users from the server.\n\n**Request Body**  \nThis request does not require a request body.\n\n**Response**  \nThe response will include an array of user objects, where each object contains the following fields:\n\n- `id` (number): The unique identifier for the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample response:\n\n``` json\n[\n    {\n        \"id\": 0,\n        \"name\": \"\",\n        \"email\": \"\",\n        \"gender\": \"\",\n        \"status\": \"\"\n    }\n]\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE THIS CREATED USER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fa5299a2-580a-4a20-b221-70b6a251f8df",
+								"exec": [
+									"pm.test(\"Update User - Verify response code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 5 seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body is received from server\", function () {\r",
+									"    pm.response.to.have.body();\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response header Content-Type=application/json\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\",\"application/json; charset=utf-8\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body contains fields such as id, name, email, gender, status\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"gender\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request => Verify if gender is [male or female]\", function () {\r",
+									"    pm.expect(pm.response.json().gender).to.be.oneOf([\"male\", \"female\"]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request => Verify if status is [active, or inactive]\", function () {\r",
+									"    pm.expect(pm.response.json().status).to.be.oneOf([\"active\", \"inactive\"]);\r",
+									"});\r",
+									"\r",
+									"/*\r",
+									"\r",
+									"pm.test(\"JSON Value/key Check ==> Verify if name was updated to :Wisdom Erhabor\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.eql(\"Wisdom Erhabor\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JSON Value/key Check ==> Verify if email is  :wisdomochus1@gmail.com\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.email).to.eql(\"wisdomochus1@gmail.com\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JSON Value/key Check ==> Verify if name was updated to :Wisdom Erhabor and email is  :wisdomochus1@gmail.com\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.name).to.eql(\"Wisdom Erhabor\");\r",
+									"    pm.expect(jsonData.email).to.eql(\"wisdomochus1@gmail.com\");\r",
+									"});\r",
+									"\r",
+									"*/\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verify if user with id = \" +pm.globals.get(\"globalID\") + \" is updated successfully\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).to.eql(pm.globals.get(\"globalID\"));\r",
+									"}); // when index is 0 value is \"globalID\"\r",
+									"\r",
+									"\r",
+									"// API CHAINING CODE //\r",
+									"\r",
+									"// 1. Extract the response of the API and store it in a local variable\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"// 2. Extract the required field(s) and store it in a local variable\r",
+									"\r",
+									"var extractedUpdatedName = jsonData.name;\r",
+									"\r",
+									"\r",
+									"//3. Convert local variable to global variables using the snippets\r",
+									"\r",
+									"pm.globals.set(\"globalUpdatedName\", extractedUpdatedName);\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"// CAPTURE THE RESPONSE ATTRIBUTES\r",
+									"\r",
+									"//pm.response.code\r",
+									"\r",
+									"console.log(\"Hello World!\");\r",
+									"\r",
+									"console.log(pm.response.code);\r",
+									"\r",
+									"console.log(\"The response code received from server is :\"+pm.response.code);\r",
+									"console.log(\"The response message received from server is :\"+pm.response.status);\r",
+									"console.log(\"The response time received from server is :\"+pm.response.responseTime+ \" milliseconds\");\r",
+									"\r",
+									"console.log(\"The response body size received from server is :\");\r",
+									"console.log(pm.response.size());\r",
+									"console.log(\"The response body (JSON) received from server is :\");\r",
+									"console.log(pm.response.json());  // text() body\r",
+									"console.log(\"The response body (text) received from server is :\");\r",
+									"console.log(pm.response.text());\r",
+									"\r",
+									"console.log(\"The response headers received from server are :\"+pm.response.headers);\r",
+									"\r",
+									"// CAPTURE THE REQUEST ATTRIBUTEES\r",
+									"\r",
+									"console.log(\"The HTTP method used in this API is: \"+pm.request.method);\r",
+									"console.log(\"The API URL used in this API is: \"+pm.request.url);\r",
+									"console.log(\"The request headers used in this API are: \"+pm.request.headers);\r",
+									"console.log(\"The request payload is: \");\r",
+									"console.log(pm.request.body);\r",
+									"console.log(\"The request size is: \");\r",
+									"console.log(pm.request.size());\r",
+									"console.log(\"The request name is : \"+pm.info.requestName);\r",
+									"\r",
+									"\r",
+									"// CONDICTIONAL STATEMENTS / POSTMAN WORKFLOWS\r",
+									"\r",
+									"if (pm.response.code == 200) {\r",
+									"    console.log(\"The '\"+pm.info.requestName+\"' API has passed\");\r",
+									"    pm.execution.setNextRequest(\"VALIDATE IF USER IS UPDATED\");\r",
+									"    // Execute the API with the specified name\r",
+									"} else {\r",
+									"    console.log(\"The '\"+pm.info.requestName+\"' API has failed\");\r",
+									"    pm.execution.setNextRequest(\"\"); // Stop test execution\r",
+									"}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e436e50f-8546-44b8-9dfe-b32a6a9a2d51",
+								"exec": [
+									"//1.\r",
+									"// Dynamically create arrays\r",
+									"let statusArrayOptions = [\"Active\", \"Inactive\"]; // Example values\r",
+									"let genderArrayOptions = [\"Male\", \"Female\"];\r",
+									"\r",
+									"// Set the created array as collection variable string\r",
+									"pm.collectionVariables.set(\"statusOptions\", JSON.stringify(statusArrayOptions));\r",
+									"pm.collectionVariables.set(\"gender\", JSON.stringify(genderArrayOptions)); // JSON string = \"**\"\r",
+									"\r",
+									"//2.\r",
+									"// Retrieve the collection variable by parsing the array string as JSON array objects\r",
+									"let statusArray = JSON.parse(pm.collectionVariables.get(\"statusOptions\"));\r",
+									"var genderArray = JSON.parse(pm.collectionVariables.get(\"gender\"));\r",
+									"\r",
+									"// Select a random array object\r",
+									"let randomStatus = statusArray[Math.floor(Math.random() * statusArray.length)];\r",
+									"var randomGender = genderArray[Math.floor(Math.random() * genderArray.length)]\r",
+									"\r",
+									"// Set the selected andom array object as a new collection variable\r",
+									"pm.collectionVariables.set(\"selectedStatus\", randomStatus);\r",
+									"pm.collectionVariables.set(\"gender\", randomGender);\r",
+									"\r",
+									"\r",
+									"//Log the selected status to the console.\r",
+									"console.log(\"Selected Status: \", randomStatus);\r",
+									"console.log(\"Selected Gender: \", randomGender);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "0fc19879-7ef5-4904-a2cc-542eb75aeddd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"user-agent": true
+						}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+							},
+							{
+								"key": "User-Agent",
+								"value": "{{$randomUserAgent}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomNamePrefix}} {{globalName}}\",\r\n    \"email\": \"{{globalEmail}}\",\r\n    \"status\": \"{{selectedStatus}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://gorest.co.in/public/v2/users/{{globalID}}"
+					},
+					"response": []
+				},
+				{
+					"name": "VALIDATE IF USER IS UPDATED",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0b4030b8-cae0-4a91-9754-7e36b4258b1f",
+								"exec": [
+									"pm.test(\"List Users - Verify response code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 5 seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+									"});\r",
+									"\r",
+									"pm.test.skip(\"Verify the response body string received from server\", function () {\r",
+									"    pm.response.to.have.body(\"response_body_string\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body is received from server\", function () {\r",
+									"    pm.response.to.have.body();\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response header Content-Type=application/json\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\",\"application/json; charset=utf-8\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body contains fields such as id, name, email, gender, status\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"gender\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"pm.test(\"Response body has valid Content-Type header\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Verify if user is updated successfully with name = \" +pm.globals.get(\"globalUpdatedName\"), function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData[0].name).to.eql(pm.globals.get(\"globalUpdatedName\"));\r",
+									"}); // when array [] index is 0 value is \"globalUpdatedName\"\r",
+									"\r",
+									"\r",
+									"\r",
+									"// CONDICTIONAL STATEMENTS / POSTMAN WORKFLOWS\r",
+									"\r",
+									"if (pm.response.code == 200) {\r",
+									"    console.log(\"The '\"+pm.info.requestName+\"' API has passed\");\r",
+									"    pm.execution.setNextRequest(\"DELETE THIS UPDATED USER\");\r",
+									"    // Execute the API with the specified name\r",
+									"} else {\r",
+									"    console.log(\"The '\"+pm.info.requestName+\"' API has failed\");\r",
+									"    pm.execution.setNextRequest(\"\"); // Stop test execution\r",
+									"}\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "2ee04b76-9b0f-4a91-940d-b1ed203ea0c6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"user-agent": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer ACCESS-TOKEN"
+							},
+							{
+								"key": "User-Agent",
+								"value": "{{$randomUserAgent}}",
+								"type": "text"
+							}
+						],
+						"url": "https://gorest.co.in/public/v2/users",
+						"description": "### Get Users\n\nThis endpoint sends an HTTP GET request to retrieve a list of users from the server.\n\n**Request Body**  \nThis request does not require a request body.\n\n**Response**  \nThe response will include an array of user objects, where each object contains the following fields:\n\n- `id` (number): The unique identifier for the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample response:\n\n``` json\n[\n    {\n        \"id\": 0,\n        \"name\": \"\",\n        \"email\": \"\",\n        \"gender\": \"\",\n        \"status\": \"\"\n    }\n]\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE THIS UPDATED USER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "159cc04c-a819-461a-bd0e-5ce2aab9e9e3",
+								"exec": [
+									"pm.test(\"Delete User - Verify response code is 204 No Content\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"    pm.response.to.have.status(\"No Content\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 5 seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body is not received from server\", function () {\r",
+									"    pm.response.to.not.have.body();\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// CONDICTIONAL STATEMENTS / POSTMAN WORKFLOWS\r",
+									"\r",
+									"if (pm.response.code == 204) {\r",
+									"    console.log(\"The '\"+pm.info.requestName+\"' API has passed\");\r",
+									"    pm.execution.setNextRequest(\"VALIDATE IF USER IS DELETED\");\r",
+									"    // Execute the API with the specified name\r",
+									"} else {\r",
+									"    console.log(\"The '\"+pm.info.requestName+\"' API has failed\");\r",
+									"    pm.execution.setNextRequest(\"\"); // Stop test execution\r",
+									"}\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "5fc029e5-b8e8-4b52-9b04-88385f748a98",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"user-agent": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+							},
+							{
+								"key": "User-Agent",
+								"value": "{{$randomUserAgent}}",
+								"type": "text"
+							}
+						],
+						"url": "https://gorest.co.in/public/v2/users/{{globalID}}"
+					},
+					"response": []
+				},
+				{
+					"name": "VALIDATE IF USER IS DELETED",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0b4030b8-cae0-4a91-9754-7e36b4258b1f",
+								"exec": [
+									"pm.test(\"List Users - Verify response code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 5 seconds\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+									"});\r",
+									"\r",
+									"pm.test.skip(\"Verify the response body string received from server\", function () {\r",
+									"    pm.response.to.have.body(\"response_body_string\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body is received from server\", function () {\r",
+									"    pm.response.to.have.body();\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response header Content-Type=application/json\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\",\"application/json; charset=utf-8\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if the response body contains fields such as id, name, email, gender, status\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"gender\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"status\");\r",
+									"});\r",
+									"pm.test(\"Response body has valid Content-Type header\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"\r",
+									"// /VALIDATE IF USER IS DELETED using Response Body Contains String Snippet\r",
+									"\r",
+									"pm.test(\"Verify if created user with id = \"+pm.globals.get(\"globalID\")+\" is deleted\", function () {\r",
+									"    pm.expect(pm.response.text()).to.not.include(pm.globals.get(\"globalID\"));\r",
+									"}); //to.not\r",
+									"\r",
+									"\r",
+									"\r",
+									"// CONDICTIONAL STATEMENTS / POSTMAN WORKFLOWS\r",
+									"\r",
+									"if (pm.response.code == 200) {\r",
+									"    console.log(\"The '\"+pm.info.requestName+\"' API has passed\");\r",
+									"    pm.execution.setNextRequest(\"\");\r",
+									"    // Stop test execution\r",
+									"} else {\r",
+									"    console.log(\"The '\"+pm.info.requestName+\"' API has failed\");\r",
+									"    pm.execution.setNextRequest(\"\"); // Stop test execution\r",
+									"}\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "930311f3-adc0-4cc9-9887-d8281744a594",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"user-agent": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer ACCESS-TOKEN"
+							},
+							{
+								"key": "User-Agent",
+								"value": "{{$randomUserAgent}}",
+								"type": "text"
+							}
+						],
+						"url": "https://gorest.co.in/public/v2/users",
+						"description": "### Get Users\n\nThis endpoint sends an HTTP GET request to retrieve a list of users from the server.\n\n**Request Body**  \nThis request does not require a request body.\n\n**Response**  \nThe response will include an array of user objects, where each object contains the following fields:\n\n- `id` (number): The unique identifier for the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample response:\n\n``` json\n[\n    {\n        \"id\": 0,\n        \"name\": \"\",\n        \"email\": \"\",\n        \"gender\": \"\",\n        \"status\": \"\"\n    }\n]\n\n ```"
+					},
+					"response": []
+				}
+			],
+			"id": "e5a340ef-d6c0-4bbd-8b53-4a21cd69e422",
+			"description": "Here, the response of an API becomes the request for another dependent API\n\nCREATE A USER (POST) → VALIDATE IF USER  \nIS CREATED (GET) → UPDATE THIS CREATED USER (PATCH) → VALIDATE IF USER IS  \nUPDATED (GET) → DELETE THIS UPDATED USER (DELETE) → VALIDATE IF USER IS  \nDELETED (GET)"
+		},
+		{
+			"name": "NEGATIVE TEST CASES",
+			"item": [
+				{
+					"name": "Unsupported HTTP Methods Testing",
+					"item": [
+						{
+							"name": "Create user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "84f071b7-d696-4426-9695-61ad1aa481f1",
+										"exec": [
+											"pm.test(\"Verify that the response code is a 4xx client side error\", function () {\r",
+											"    pm.response.to.be.clientError;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "9f8ae8c1-6e66-4ddf-aae8-cdcec2064304",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"gender\": \"{{gender}}\", \r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"{{selectedStatus}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://gorest.co.in/public/v2/users",
+								"description": "### Add New User\n\nThis endpoint allows you to add a new user to the system.\n\n#### Request Body\n\n- `name` (string, required): The name of the user.\n    \n- `gender` (string, required): The gender of the user.\n    \n- `email` (string, required): The email address of the user.\n    \n- `status` (string, required): The status of the user.\n    \n\n#### Response\n\nUpon successful creation, the endpoint returns the details of the newly created user including:\n\n- `id` (integer): The unique identifier of the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample Response:\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"\",\n    \"email\": \"\",\n    \"gender\": \"\",\n    \"status\": \"\"\n}\n\n ```"
+							},
+							"response": []
+						}
+					],
+					"id": "e2f2e3cb-b1d0-4c41-983b-2671d76d07bc",
+					"description": "Test the give API with an invalid http method and the expected response code is 4XX client side error."
+				},
+				{
+					"name": "Broken Endpoints Testing",
+					"item": [
+						{
+							"name": "List users API",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "0b4030b8-cae0-4a91-9754-7e36b4258b1f",
+										"exec": [
+											"pm.test(\"Verify if the response code is 4xx client side or 5xx sever error\", function () {\r",
+											"    pm.response.to.be.error; // general error\r",
+											"});\r",
+											"// v1 should throw error\r",
+											"/*\r",
+											"pm.response.to.be.serverError\r",
+											"pm.response.to.be.clientError\r",
+											"*/\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "e3a81a93-d966-4f1d-9426-4547cb111126",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer ACCESS-TOKEN"
+									}
+								],
+								"url": "https://gorest.co.in/public/v1/users",
+								"description": "### Get Users\n\nThis endpoint sends an HTTP GET request to retrieve a list of users from the server.\n\n**Request Body**  \nThis request does not require a request body.\n\n**Response**  \nThe response will include an array of user objects, where each object contains the following fields:\n\n- `id` (number): The unique identifier for the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample response:\n\n``` json\n[\n    {\n        \"id\": 0,\n        \"name\": \"\",\n        \"email\": \"\",\n        \"gender\": \"\",\n        \"status\": \"\"\n    }\n]\n\n ```"
+							},
+							"response": []
+						},
+						{
+							"name": "Create user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "84f071b7-d696-4426-9695-61ad1aa481f1",
+										"exec": [
+											"pm.test(\"Verify if the response code is 4xx client side or 5xx sever error\", function () {\r",
+											"    pm.response.to.be.error; // general error\r",
+											"});\r",
+											"\r",
+											"/*\r",
+											"pm.response.to.be.serverError\r",
+											"pm.response.to.be.clientError\r",
+											"*/\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "749bac51-ab27-46fc-895d-f8c34509cf8b",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Wisdom Erhabor\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"wisdomochus4@gmail.com\",\r\n    \"status\": \"active\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://gorest.co.in/p/v2/users",
+								"description": "### Add New User\n\nThis endpoint allows you to add a new user to the system.\n\n#### Request Body\n\n- `name` (string, required): The name of the user.\n    \n- `gender` (string, required): The gender of the user.\n    \n- `email` (string, required): The email address of the user.\n    \n- `status` (string, required): The status of the user.\n    \n\n#### Response\n\nUpon successful creation, the endpoint returns the details of the newly created user including:\n\n- `id` (integer): The unique identifier of the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample Response:\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"\",\n    \"email\": \"\",\n    \"gender\": \"\",\n    \"status\": \"\"\n}\n\n ```"
+							},
+							"response": []
+						},
+						{
+							"name": "Update user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "fa5299a2-580a-4a20-b221-70b6a251f8df",
+										"exec": [
+											"pm.test(\"Verify if the response code is 4xx client side or 5xx sever error\", function () {\r",
+											"    pm.response.to.be.error; // general error\r",
+											"});\r",
+											"\r",
+											"/*\r",
+											"pm.response.to.be.serverError\r",
+											"pm.response.to.be.clientError\r",
+											"*/"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "4e4c5328-6d5b-4b1f-9314-aefac644d47a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Wisdom Erhabor\",\r\n    \"email\": \"wisdomochus1@gmail.com\",\r\n    \"status\": \"active\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://gorest.co.in/public/v2/us/7441656"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "159cc04c-a819-461a-bd0e-5ce2aab9e9e3",
+										"exec": [
+											"pm.test(\"Verify if the response code is 4xx client side or 5xx sever error\", function () {\r",
+											"    pm.response.to.be.error; // general error\r",
+											"});\r",
+											"\r",
+											"/*\r",
+											"pm.response.to.be.serverError\r",
+											"pm.response.to.be.clientError\r",
+											"*/\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "b266caf8-26d5-4843-ab7d-e23b1e8c8ece",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								],
+								"url": "https://gorest.co.in//v2/users/7441782"
+							},
+							"response": []
+						}
+					],
+					"id": "af00c75f-0899-4a3a-a35f-30c5d2b937bd",
+					"description": "Broken Endpoints Testing"
+				},
+				{
+					"name": "Payload Tampering Testing",
+					"item": [
+						{
+							"name": "Create user - Invalid data type -  Invalid name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "84f071b7-d696-4426-9695-61ad1aa481f1",
+										"exec": [
+											"pm.test(\"Verify if the response code is 4xx client side or 5xx sever error\", function () {\r",
+											"    pm.response.to.be.error; // general error\r",
+											"});\r",
+											"\r",
+											"/*\r",
+											"pm.response.to.be.serverError\r",
+											"pm.response.to.be.clientError\r",
+											"*/\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "458860b2-9f18-4a0a-a188-13ed68e165c0",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"345643@#$$3\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"active\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://gorest.co.in/public/v2/users",
+								"description": "### Add New User\n\nThis endpoint allows you to add a new user to the system.\n\n#### Request Body\n\n- `name` (string, required): The name of the user.\n    \n- `gender` (string, required): The gender of the user.\n    \n- `email` (string, required): The email address of the user.\n    \n- `status` (string, required): The status of the user.\n    \n\n#### Response\n\nUpon successful creation, the endpoint returns the details of the newly created user including:\n\n- `id` (integer): The unique identifier of the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample Response:\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"\",\n    \"email\": \"\",\n    \"gender\": \"\",\n    \"status\": \"\"\n}\n\n ```"
+							},
+							"response": []
+						},
+						{
+							"name": "Create user - Invalid data type - Invalid gender",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "84f071b7-d696-4426-9695-61ad1aa481f1",
+										"exec": [
+											"pm.test(\"Verify if the response code is 4xx client side or 5xx sever error\", function () {\r",
+											"    pm.response.to.be.error; // general error\r",
+											"});\r",
+											"\r",
+											"/*\r",
+											"pm.response.to.be.serverError\r",
+											"pm.response.to.be.clientError\r",
+											"*/\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "ea324691-f948-4843-a1a3-828a414fbac6",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"gender\": \"maleq\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"active\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://gorest.co.in/public/v2/users",
+								"description": "### Add New User\n\nThis endpoint allows you to add a new user to the system.\n\n#### Request Body\n\n- `name` (string, required): The name of the user.\n    \n- `gender` (string, required): The gender of the user.\n    \n- `email` (string, required): The email address of the user.\n    \n- `status` (string, required): The status of the user.\n    \n\n#### Response\n\nUpon successful creation, the endpoint returns the details of the newly created user including:\n\n- `id` (integer): The unique identifier of the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample Response:\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"\",\n    \"email\": \"\",\n    \"gender\": \"\",\n    \"status\": \"\"\n}\n\n ```"
+							},
+							"response": []
+						},
+						{
+							"name": "Create user - Additional Payload Fields",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "84f071b7-d696-4426-9695-61ad1aa481f1",
+										"exec": [
+											"pm.test(\"Verify if the response code is 4xx client side or 5xx sever error\", function () {\r",
+											"    pm.response.to.be.error; // general error\r",
+											"});\r",
+											"\r",
+											"/*\r",
+											"pm.response.to.be.serverError\r",
+											"pm.response.to.be.clientError\r",
+											"*/\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "8cb91b7c-ed14-4f3d-ab92-eb60ab41da80",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"active\",\r\n    \"mobile\": \"08169228069\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://gorest.co.in/public/v2/users",
+								"description": "### Add New User\n\nThis endpoint allows you to add a new user to the system.\n\n#### Request Body\n\n- `name` (string, required): The name of the user.\n    \n- `gender` (string, required): The gender of the user.\n    \n- `email` (string, required): The email address of the user.\n    \n- `status` (string, required): The status of the user.\n    \n\n#### Response\n\nUpon successful creation, the endpoint returns the details of the newly created user including:\n\n- `id` (integer): The unique identifier of the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample Response:\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"\",\n    \"email\": \"\",\n    \"gender\": \"\",\n    \"status\": \"\"\n}\n\n ```"
+							},
+							"response": []
+						},
+						{
+							"name": "Create user - Empty Payload Values",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "84f071b7-d696-4426-9695-61ad1aa481f1",
+										"exec": [
+											"pm.test(\"Verify if the response code is 4xx client side or 5xx sever error\", function () {\r",
+											"    pm.response.to.be.error; // general error\r",
+											"});\r",
+											"\r",
+											"/*\r",
+											"pm.response.to.be.serverError\r",
+											"pm.response.to.be.clientError\r",
+											"*/\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "074945da-f0e8-4a92-ad93-da5325c9bb02",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://gorest.co.in/public/v2/users",
+								"description": "### Add New User\n\nThis endpoint allows you to add a new user to the system.\n\n#### Request Body\n\n- `name` (string, required): The name of the user.\n    \n- `gender` (string, required): The gender of the user.\n    \n- `email` (string, required): The email address of the user.\n    \n- `status` (string, required): The status of the user.\n    \n\n#### Response\n\nUpon successful creation, the endpoint returns the details of the newly created user including:\n\n- `id` (integer): The unique identifier of the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample Response:\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"\",\n    \"email\": \"\",\n    \"gender\": \"\",\n    \"status\": \"\"\n}\n\n ```"
+							},
+							"response": []
+						},
+						{
+							"name": "Create user - Missing Payload Fields",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "84f071b7-d696-4426-9695-61ad1aa481f1",
+										"exec": [
+											"pm.test(\"Verify if the response code is 4xx client side or 5xx sever error\", function () {\r",
+											"    pm.response.to.be.error; // general error\r",
+											"});\r",
+											"\r",
+											"/*\r",
+											"pm.response.to.be.serverError\r",
+											"pm.response.to.be.clientError\r",
+											"*/\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "358cd9ed-c1c2-442d-b41e-5aa41f4ff6e9",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n //   \"name\": \"{{$randomFullName}}\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"{{$randomEmail}}\",  // Comment out the rest of the fields and test\r\n    \"status\": \"active\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://gorest.co.in/public/v2/users",
+								"description": "### Add New User\n\nThis endpoint allows you to add a new user to the system.\n\n#### Request Body\n\n- `name` (string, required): The name of the user.\n    \n- `gender` (string, required): The gender of the user.\n    \n- `email` (string, required): The email address of the user.\n    \n- `status` (string, required): The status of the user.\n    \n\n#### Response\n\nUpon successful creation, the endpoint returns the details of the newly created user including:\n\n- `id` (integer): The unique identifier of the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample Response:\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"\",\n    \"email\": \"\",\n    \"gender\": \"\",\n    \"status\": \"\"\n}\n\n ```"
+							},
+							"response": []
+						},
+						{
+							"name": "Create user - Invalid data length",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "84f071b7-d696-4426-9695-61ad1aa481f1",
+										"exec": [
+											"pm.test(\"Verify if the response code is 4xx client side or 5xx sever error\", function () {\r",
+											"    pm.response.to.be.error; // general error\r",
+											"});\r",
+											"\r",
+											"/*\r",
+											"pm.response.to.be.serverError\r",
+											"pm.response.to.be.clientError\r",
+											"*/\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "a46e183b-6adb-4af1-8856-01f276d2e929",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \" Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor Wisdom Erhabor\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"active\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://gorest.co.in/public/v2/users",
+								"description": "### Add New User\n\nThis endpoint allows you to add a new user to the system.\n\n#### Request Body\n\n- `name` (string, required): The name of the user.\n    \n- `gender` (string, required): The gender of the user.\n    \n- `email` (string, required): The email address of the user.\n    \n- `status` (string, required): The status of the user.\n    \n\n#### Response\n\nUpon successful creation, the endpoint returns the details of the newly created user including:\n\n- `id` (integer): The unique identifier of the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample Response:\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"\",\n    \"email\": \"\",\n    \"gender\": \"\",\n    \"status\": \"\"\n}\n\n ```"
+							},
+							"response": []
+						},
+						{
+							"name": "Update user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "fa5299a2-580a-4a20-b221-70b6a251f8df",
+										"exec": [
+											"pm.test(\"Verify if the response code is 4xx client side or 5xx sever error\", function () {\r",
+											"    pm.response.to.be.error; // general error\r",
+											"});\r",
+											"\r",
+											"/*\r",
+											"pm.response.to.be.serverError\r",
+											"pm.response.to.be.clientError\r",
+											"*/\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "65cd3af5-0cd9-4133-ad47-354e556ac0a0",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Wisdom Erhabor\",\r\n    \"email\": \"wisdomochus1@gmail.com\",\r\n    \"status\": \"active\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://gorest.co.in/public/v2/users/7441656"
+							},
+							"response": []
+						}
+					],
+					"id": "c4d7d542-612b-4273-81d6-bc411f2adf30",
+					"description": "Test the given API with an invalid payload and the expected response code is 4XX client side error.\n\ne.g\n\n- Invalid data type\n    \n- Invalid data length\n    \n- missing payload fields\n    \n- additional payload fields\n    \n- empty payload values"
+				}
+			],
+			"id": "1180d63e-8c7b-4faa-a2c5-fc48108776ed",
+			"description": "i. Unsupported HTTP methods Testing\n\nii. Broken Endpoints Testing\n\niii. Payload Tampering Testing",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b0bc8587-2e78-4231-a5eb-a4a78d419442",
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"//1.\r",
+							"// Dynamically create arrays\r",
+							"let statusArrayOptions = [\"Active\", \"Inactive\"]; // Example values\r",
+							"let genderArrayOptions = [\"Male\", \"Female\"];\r",
+							"\r",
+							"// Set the created array as collection variable string\r",
+							"pm.collectionVariables.set(\"statusOptions\", JSON.stringify(statusArrayOptions));\r",
+							"pm.collectionVariables.set(\"gender\", JSON.stringify(genderArrayOptions)); // JSON string = \"**\"\r",
+							"\r",
+							"//2.\r",
+							"// Retrieve the collection variable by parsing the array string as JSON array objects\r",
+							"let statusArray = JSON.parse(pm.collectionVariables.get(\"statusOptions\"));\r",
+							"var genderArray = JSON.parse(pm.collectionVariables.get(\"gender\"));\r",
+							"\r",
+							"// Select a random array object\r",
+							"let randomStatus = statusArray[Math.floor(Math.random() * statusArray.length)];\r",
+							"var randomGender = genderArray[Math.floor(Math.random() * genderArray.length)]\r",
+							"\r",
+							"// Set the selected andom array object as a new collection variable\r",
+							"pm.collectionVariables.set(\"selectedStatus\", randomStatus);\r",
+							"pm.collectionVariables.set(\"gender\", randomGender);\r",
+							"\r",
+							"\r",
+							"//Log the selected status to the console.\r",
+							"console.log(\"Selected Status: \", randomStatus);\r",
+							"console.log(\"Selected Gender: \", randomGender);"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b284c5f6-cd4a-4d32-aa78-1e7e4026d89c",
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "statusOptions",
+			"value": ""
+		},
+		{
+			"key": "selectedStatus",
+			"value": ""
+		},
+		{
+			"key": "gender",
+			"value": ""
+		}
+	]
+}
