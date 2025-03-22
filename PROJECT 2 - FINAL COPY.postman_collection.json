@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "842e076c-c816-4aeb-9700-b3d7bfae0f28",
+		"_postman_id": "1e50575a-56e4-49c3-a1d0-9feccbf7ffc4",
 		"name": "PROJECT 2 - FINAL COPY",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "30861133",
-		"_collection_link": "https://wisdomeo.postman.co/workspace/b3e04790-c8ef-42e4-ace3-550d72bb38db/collection/30865648-842e076c-c816-4aeb-9700-b3d7bfae0f28?action=share&source=collection_link&creator=30861133"
+		"_collection_link": "https://wisdomeo.postman.co/workspace/API-Test-Automation-Training~b3e04790-c8ef-42e4-ace3-550d72bb38db/collection/30861133-1e50575a-56e4-49c3-a1d0-9feccbf7ffc4?action=share&source=collection_link&creator=30861133"
 	},
 	"item": [
 		{
@@ -837,11 +837,11 @@
 									"\r",
 									"if (pm.response.code == 200) {\r",
 									"    console.log(\"The '\"+pm.info.requestName+\"' API has passed\");\r",
-									"    pm.execution.setNextRequest(\"\");\r",
+									"    // pm.execution.setNextRequest(\"\");\r",
 									"    // Stop test execution\r",
 									"} else {\r",
 									"    console.log(\"The '\"+pm.info.requestName+\"' API has failed\");\r",
-									"    pm.execution.setNextRequest(\"\"); // Stop test execution\r",
+									"    // pm.execution.setNextRequest(\"\"); // Stop test execution\r",
 									"}\r",
 									"\r",
 									"\r",
@@ -1232,7 +1232,7 @@
 									}
 								],
 								"url": {
-									"raw": "https://gorest.co.in//v2/users/7441782",
+									"raw": "https://gorest.co.in/v2/users/7441782",
 									"protocol": "https",
 									"host": [
 										"gorest",
@@ -1240,7 +1240,6 @@
 										"in"
 									],
 									"path": [
-										"",
 										"v2",
 										"users",
 										"7441782"
