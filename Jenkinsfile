@@ -16,9 +16,15 @@ pipeline {
 
         stage('Run Postman Tests') {
             steps {
+                script {
+                    def timestamp = new Date().format("yyyy-MM-dd_HH.mm.ss")
+                    env.REPORT_NAME = "htmlextra-report-${timestamp}.html"
+                }
                 bat """
+                mkdir "Test Results\\newman" && ^
                 newman run "PROJECT 2 - FINAL COPY.postman_collection.json" --folder "E2E API AUTOMATION" ^
-                -r htmlextra --reporter-htmlextra-title "Gorest.co.in API Test Report" ^
+                -r htmlextra --reporter-htmlextra-export "Test Results\\newman\\%REPORT_NAME%" ^
+                --reporter-htmlextra-title "Gorest.co.in API Test Report" ^
                 --reporter-htmlextra-browserTitle "Jenkins Gorest.co.in Newman Test Report" ^
                 --reporter-htmlextra-omitHeaders --reporter-htmlextra-titleSize 4 ^
                 --reporter-htmlextra-darkTheme=false
@@ -28,7 +34,7 @@ pipeline {
 
         stage('Archive Reports') {
             steps {
-                archiveArtifacts 'Test Results/newman/*.html'
+                archiveArtifacts "Test Results/newman/*.html"
             }
         }
     }
@@ -37,8 +43,8 @@ pipeline {
         always {
             publishHTML (target: [
                 reportDir: 'Test Results/newman',
-                reportFiles: 'htmlextra-report.html',
-                reportName: 'Newman Test Report'
+                reportFiles: '*.html',
+                reportName: 'Newman Test Reports'
             ])
         }
     }
