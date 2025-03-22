@@ -120,7 +120,7 @@
 									"pm.collectionVariables.set(\"gender\", randomGender);\r",
 									"\r",
 									"\r",
-									"//Log the selected status to the console.\r",
+									"//Log the selected status to the console..\r",
 									"console.log(\"Selected Status: \", randomStatus);\r",
 									"console.log(\"Selected Gender: \", randomGender);"
 								],
