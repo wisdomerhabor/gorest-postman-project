@@ -21,7 +21,7 @@ pipeline {
                     env.REPORT_NAME = "htmlextra-report-${timestamp}.html"
                 }
                 bat """
-                if not exist "Test Results\newman" mkdir "Test Results\newman" && ^
+                if not exist "Test Results\\newman" mkdir "Test Results\\newman"
                 newman run "PROJECT 2 - FINAL COPY.postman_collection.json" --folder "E2E API AUTOMATION" ^
                 -r htmlextra --reporter-htmlextra-export "Test Results\\newman\\%REPORT_NAME%" ^
                 --reporter-htmlextra-title "Gorest.co.in API Test Report" ^
