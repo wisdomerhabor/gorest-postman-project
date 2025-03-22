@@ -23,7 +23,7 @@ pipeline {
                 bat """
                 if not exist "Test Results\\newman" mkdir "Test Results\\newman"
                 newman run "PROJECT 2 - FINAL COPY.postman_collection.json" --folder "E2E API AUTOMATION" ^
-                -r htmlextra --reporter-htmlextra-export "target\\%REPORT_NAME%" ^
+                -r htmlextra --reporter-htmlextra-export "Test Results\\newman\\%REPORT_NAME%" ^
                 --reporter-htmlextra-title "Gorest.co.in API Test Report" ^
                 --reporter-htmlextra-browserTitle "Jenkins Gorest.co.in Newman Test Report" ^
                 --reporter-htmlextra-omitHeaders --reporter-htmlextra-titleSize 4 ^
@@ -34,7 +34,7 @@ pipeline {
 
         stage('Archive Reports') {
             steps {
-                archiveArtifacts "target/*.html"
+                archiveArtifacts "Test Results/newman/*.html"
             }
         }
     }
@@ -42,9 +42,9 @@ pipeline {
     post {
         always {
             publishHTML (target: [
-                reportDir: 'target',
-                reportFiles: 'newman-report.html',
-                reportName: 'Newman Test Report'
+                reportDir: 'Test Results/newman',
+                reportFiles: '*.html',
+                reportName: 'Newman Test Reports'
             ])
         }
     }
