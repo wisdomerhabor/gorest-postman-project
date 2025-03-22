@@ -28,7 +28,7 @@ pipeline {
 
         stage('Archive Reports') {
             steps {
-                archiveArtifacts 'newman/*.html'
+                archiveArtifacts 'Test Results/newman/*.html'
             }
         }
     }
@@ -36,7 +36,7 @@ pipeline {
     post {
         always {
             publishHTML (target: [
-                reportDir: 'newman',
+                reportDir: 'Test Results/newman',
                 reportFiles: 'htmlextra-report.html',
                 reportName: 'Newman Test Report'
             ])
