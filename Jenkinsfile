@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/wisdomerhabor/gorest-postman-project.git'
+                git branch: 'master', url: 'https://github.com/wisdomerhabor/gorest-postman-project.git'
             }
         }
 
