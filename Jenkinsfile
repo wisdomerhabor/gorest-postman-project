@@ -8,7 +8,7 @@ pipeline {
             }
         }
 
-        stage('Install Newman') {
+        stage('Install Dependencies') {
             steps {
                 bat 'npm install -g newman newman-reporter-htmlextra'
             }
@@ -16,10 +16,13 @@ pipeline {
 
         stage('Run Postman Tests') {
             steps {
-                bat '''
-                cd %WORKSPACE%
-                C:\Users\Wisdom.Erhabho\.jenkins\workspace\gorest-postman-project>newman run "PROJECT 2 - FINAL COPY.postman_collection.json" --folder "E2E API AUTOMATION" -r htmlextra --reporter-htmlextra-title "Gorest.co.in API Test Report" --reporter-htmlextra-browserTitle "Jenkins Gorest.co.in Newman Test Report" --reporter-htmlextra-omitHeaders --reporter-htmlextra-titleSize 4 --reporter-htmlextra-darkTheme=false
-                '''
+                bat """
+                newman run "PROJECT 2 - FINAL COPY.postman_collection.json" --folder "E2E API AUTOMATION" ^
+                -r htmlextra --reporter-htmlextra-title "Gorest.co.in API Test Report" ^
+                --reporter-htmlextra-browserTitle "Jenkins Gorest.co.in Newman Test Report" ^
+                --reporter-htmlextra-omitHeaders --reporter-htmlextra-titleSize 4 ^
+                --reporter-htmlextra-darkTheme=false
+                """
             }
         }
 
@@ -34,8 +37,8 @@ pipeline {
         always {
             publishHTML (target: [
                 reportDir: 'newman',
-                reportFiles: 'jenkins-htmlextra-report.html',
-                reportName: 'Jenkins Newman Test Report'
+                reportFiles: 'htmlextra-report.html',
+                reportName: 'Newman Test Report'
             ])
         }
     }
