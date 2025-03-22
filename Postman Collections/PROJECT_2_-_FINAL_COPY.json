@@ -9,6 +9,11 @@
 			"name": "E2E API AUTOMATION",
 			"item": [
 				{
+					"name": "E2E",
+					"item": [],
+					"id": "cf10c11e-b7ca-4595-8727-43819203ee4f"
+				},
+				{
 					"name": "CREATE A USER",
 					"event": [
 						{
@@ -855,64 +860,6 @@
 			"name": "NEGATIVE TEST CASES",
 			"item": [
 				{
-					"name": "Unsupported HTTP Methods Testing",
-					"item": [
-						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "84f071b7-d696-4426-9695-61ad1aa481f1",
-										"exec": [
-											"pm.test(\"Verify that the response code is a 4xx client side error\", function () {\r",
-											"    pm.response.to.be.clientError;\r",
-											"});"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"id": "9f8ae8c1-6e66-4ddf-aae8-cdcec2064304",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json"
-									},
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"gender\": \"{{gender}}\", \r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"{{selectedStatus}}\"\r\n}\r\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": "https://gorest.co.in/public/v2/users",
-								"description": "### Add New User\n\nThis endpoint allows you to add a new user to the system.\n\n#### Request Body\n\n- `name` (string, required): The name of the user.\n    \n- `gender` (string, required): The gender of the user.\n    \n- `email` (string, required): The email address of the user.\n    \n- `status` (string, required): The status of the user.\n    \n\n#### Response\n\nUpon successful creation, the endpoint returns the details of the newly created user including:\n\n- `id` (integer): The unique identifier of the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample Response:\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"\",\n    \"email\": \"\",\n    \"gender\": \"\",\n    \"status\": \"\"\n}\n\n ```"
-							},
-							"response": []
-						}
-					],
-					"id": "e2f2e3cb-b1d0-4c41-983b-2671d76d07bc",
-					"description": "Test the give API with an invalid http method and the expected response code is 4XX client side error."
-				},
-				{
 					"name": "Broken Endpoints Testing",
 					"item": [
 						{
@@ -1546,6 +1493,64 @@
 					],
 					"id": "c4d7d542-612b-4273-81d6-bc411f2adf30",
 					"description": "Test the given API with an invalid payload and the expected response code is 4XX client side error.\n\ne.g\n\n- Invalid data type\n    \n- Invalid data length\n    \n- missing payload fields\n    \n- additional payload fields\n    \n- empty payload values"
+				},
+				{
+					"name": "Unsupported HTTP Methods Testing",
+					"item": [
+						{
+							"name": "Create user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "84f071b7-d696-4426-9695-61ad1aa481f1",
+										"exec": [
+											"pm.test(\"Verify that the response code is a 4xx client side error\", function () {\r",
+											"    pm.response.to.be.clientError;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "9f8ae8c1-6e66-4ddf-aae8-cdcec2064304",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"gender\": \"{{gender}}\", \r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"{{selectedStatus}}\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://gorest.co.in/public/v2/users",
+								"description": "### Add New User\n\nThis endpoint allows you to add a new user to the system.\n\n#### Request Body\n\n- `name` (string, required): The name of the user.\n    \n- `gender` (string, required): The gender of the user.\n    \n- `email` (string, required): The email address of the user.\n    \n- `status` (string, required): The status of the user.\n    \n\n#### Response\n\nUpon successful creation, the endpoint returns the details of the newly created user including:\n\n- `id` (integer): The unique identifier of the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample Response:\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"\",\n    \"email\": \"\",\n    \"gender\": \"\",\n    \"status\": \"\"\n}\n\n ```"
+							},
+							"response": []
+						}
+					],
+					"id": "e2f2e3cb-b1d0-4c41-983b-2671d76d07bc",
+					"description": "Test the give API with an invalid http method and the expected response code is 4XX client side error."
 				}
 			],
 			"id": "1180d63e-8c7b-4faa-a2c5-fc48108776ed",
