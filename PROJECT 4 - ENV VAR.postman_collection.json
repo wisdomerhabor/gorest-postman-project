@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "7e203fe7-d81a-47bc-8cea-5d2c27292365",
+		"name": "PROJECT 4 - ENV VAR",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30861133",
+		"_collection_link": "https://wisdomeo.postman.co/workspace/b3e04790-c8ef-42e4-ace3-550d72bb38db/collection/30865648-7e203fe7-d81a-47bc-8cea-5d2c27292365?action=share&source=collection_link&creator=30861133"
+	},
+	"item": [
+		{
+			"name": "ENVIRONMENT VARIABLES v02",
+			"item": [
+				{
+					"name": "Create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create User - Verify response code is 201 Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.response.to.have.status(\"Created\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// 1. DELETE/CLEAR THE ENVIRONMENT VARIABLE\r",
+									"//pm.environment.unset(\"envProtocol\");\r",
+									"//pm.environment.unset(\"envURL\");\r",
+									"\r",
+									"// 2. CREATE/SET THE ENVIRONMENT VARIABLE\r",
+									"//pm.environment.set(\"envProtocol\", \"https\");\r",
+									"//pm.environment.set(\"envURL\", \"gorest.co.in\");\r",
+									"\r",
+									"// 3. GET THE ENVIRONMENT VARIABLE\r",
+									"pm.environment.get(\"envProtocol\");\r",
+									"pm.environment.get(\"envURL\");\r",
+									"\r",
+									"console.log(\"The value of envProtocol is : \"+pm.environment.get(\"envProtocol\"));\r",
+									"console.log(\"The value of envURL is : \"+pm.environment.get(\"envURL\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{cAccessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"gender\": \"male\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"status\": \"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{envProtocol}}://{{envURL}}/public/v2/users",
+							"protocol": "{{envProtocol}}",
+							"host": [
+								"{{envURL}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users"
+							]
+						},
+						"description": "### Add New User\n\nThis endpoint allows you to add a new user to the system.\n\n#### Request Body\n\n- `name` (string, required): The name of the user.\n    \n- `gender` (string, required): The gender of the user.\n    \n- `email` (string, required): The email address of the user.\n    \n- `status` (string, required): The status of the user.\n    \n\n#### Response\n\nUpon successful creation, the endpoint returns the details of the newly created user including:\n\n- `id` (integer): The unique identifier of the user.\n    \n- `name` (string): The name of the user.\n    \n- `email` (string): The email address of the user.\n    \n- `gender` (string): The gender of the user.\n    \n- `status` (string): The status of the user.\n    \n\nExample Response:\n\n``` json\n{\n    \"id\": 0,\n    \"name\": \"\",\n    \"email\": \"\",\n    \"gender\": \"\",\n    \"status\": \"\"\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Update User - Verify response code is 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// 1. DELETE/CLEAR THE GLOBAL VARIABLE\r",
+									"//pm.globals.unset(\"gAccessToken\");\r",
+									"\r",
+									"\r",
+									"// 2. CREATE/SET THE GLOBAL VARIABLE\r",
+									"//pm.globals.set(\"gAccessToken\", \"5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe\");\r",
+									"\r",
+									"// 3. GET THE GLOBAL VARIABLE\r",
+									"pm.globals.get(\"gAccessToken\");\r",
+									"\r",
+									"console.log(\"The value of gAccessToken is :\"+pm.globals.get(\"gAccessToken\"))"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{cAccessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Wisdom Erhabor\",\r\n    \"email\": \"wisdomochus1@gmail.com\",\r\n    \"status\": \"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{envProtocol}}://{{envURL}}/public/v2/users/7441656",
+							"protocol": "{{envProtocol}}",
+							"host": [
+								"{{envURL}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users",
+								"7441656"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "These variables are created to be specific to one collection only i.e., other collections cannot access another collection variables. These variables can be considered as private variables to the collection where we have defined them.\n\nCreating collection variables in postman\n\n\\- Step by step wizard\n\n\\- manual process  \n\\- using javascripts"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "cAccessToken",
+			"value": "5582f007d8a190ac92d47850fc3ccb4dc14c96e0de5bf83db58270734a7952fe",
+			"type": "string"
+		}
+	]
+}
